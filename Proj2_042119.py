@@ -66,6 +66,11 @@ class Classifier(object):
 
         #confusion matrix: accuracy over time per perceptron
         self.confusionMatrix = np.zeros((10,2))
+        #print(self.confusionMatrix)
+        sequence = np.arange(10).reshape((10,1))
+        #print(sequence)
+        self.confusionMatrix = np.concatenate([sequence, self.confusionMatrix], 1)
+        #print(self.confusionMatrix)
 
         #history: accuracy over time (3 columns are epoch, total, and correct)
         #the percentage can be calculated afterward
@@ -176,8 +181,8 @@ class Classifier(object):
                 #do different things depending on whether this is test phase or training phase
                 if(training == False):
                     #update confusion matrix:
-                    self.confMatrix[cval, 1] += 1
-                    self.confMatrix[cval, 0] += num_correct
+                    self.confMatrix[cval, 2] += 1
+                    self.confMatrix[cval, 1] += num_correct
                 
             #calculate percent correct
             pc = 100 * correct_response/num_entries
@@ -237,10 +242,10 @@ class Classifier(object):
         #print("H->O WEIGHTS: ", self.hiddenToOutputWeights)
 
     #print confusion matrix:
-    #def printConfusionMatrix(self):
+    def printConfusionMatrix(self):
         #print(f"after end, I->H weights:", self.inputToHiddenWeights.transpose())
         #print(f"after end, H->O weights:", self.hiddenToOutputWeights.transpose())
-        #print(self.confusionMatrix)
+        print(self.confusionMatrix)
 
     #print history (accuracy graphs) using matplotlib:
     def printHistory(self):
@@ -250,7 +255,7 @@ class Classifier(object):
 
 #Execution begins here.
 #classifier constructor: num_outputs, learning_rate, num_inputs, num_hidden, momentum, epochs
-c = Classifier(10, 0.01, 785, 20, 0, 50)
+c = Classifier(10, 0.01, 785, 10, 0.25, 50)
 #c = Classifier(2, 0.1, 3, 2, 0, 1)
 #c.read("data/microset.csv")
 c.read("data/mnist_train_part1.csv")
@@ -259,5 +264,5 @@ c.analyze(True, 0)
 #c.analyze(True, 1)
 #c.updateInput("data/mnist_test.csv")
 #c.analyze(False, 2)
-#c.printConfusionMatrix()
-#c.printHistory()
+c.printConfusionMatrix()
+c.printHistory()
