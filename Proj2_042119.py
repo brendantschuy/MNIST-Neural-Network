@@ -33,7 +33,7 @@ class Classifier(object):
 
     #read in the input and organize it in data structures (matrices/numPy arrays)
     def read(self, fileName):
-        self.inputFile = open(fileName, encoding='utf-8-sig')
+        self.inputFile = open(fileName)#, encoding='utf-8-sig')
 
         with self.inputFile as file:
             self.inputMatrix = [[float(digit) for digit in line.split(',')] for line in file]
@@ -255,14 +255,14 @@ class Classifier(object):
 
 #Execution begins here.
 #classifier constructor: num_outputs, learning_rate, num_inputs, num_hidden, momentum, epochs
-c = Classifier(10, 0.01, 785, 10, 0.25, 50)
+c = Classifier(10, 0.1, 785, 100, 0, 50)
 #c = Classifier(2, 0.1, 3, 2, 0, 1)
 #c.read("data/microset.csv")
-c.read("data/mnist_train_part1.csv")
+c.read("data/mnist_train.csv")
 c.analyze(True, 0)
 #c.updateInput("data/mnist_train_part2.csv")
 #c.analyze(True, 1)
-#c.updateInput("data/mnist_test.csv")
-#c.analyze(False, 2)
+c.updateInput("data/mnist_test.csv")
+c.analyze(False, 2)
 c.printConfusionMatrix()
 c.printHistory()
